@@ -40,8 +40,8 @@
         .preview-container { flex: 1; padding: 20px; overflow-y: auto; display: flex; justify-content: center; background: #525659; }
 
         .folha-a4 {
-            width: 210mm; min-height: 297mm; background: white; padding: 25mm 20mm;
-            box-shadow: 0 0 15px rgba(0,0,0,0.3); display: flex; flex-direction: column; position: relative;
+            width: 210mm; min-height: 297mm; background: white; padding: 10mm 15mm;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3); display: flex; flex-direction: column; position: relative; overflow: hidden;
         }
 
         .doc-header { border: 1.5px solid #000; text-align: center; padding: 10px; margin-bottom: 40px; }
@@ -61,7 +61,7 @@
         #containerDeclaracao { margin-bottom: 35px; font-size: 13px; text-align: justify; display: none; line-height: 1.5; }
         .container-local-data { text-align: center; margin-top: 60px; font-weight: bold; font-size: 13px; }
 
-        .assinaturas { margin-top: auto; display: flex; justify-content: space-around; padding-bottom: 10mm; }
+        .assinaturas { margin-top: 150px; display: flex; justify-content: space-around; padding-bottom: 10mm; }
         .box-assinatura { width: 45%; border-top: 1px solid #000; text-align: left; padding-top: 5px; font-size: 11px; line-height: 1.4; }
 
         @media print {
