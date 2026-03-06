@@ -98,9 +98,10 @@
         <label>Razão Social</label>
         <input type="text" id="inEmpresa" placeholder="Digite a Razão Social">
     </div>
+
     <div class="form-group">
         <label>CNPJ</label>
-        <input type="text" id="inCnpj" placeholder="00.000.000/0000-00">
+        <input type="text" id="inCnpj" placeholder="00.000.000/0000-00" oninput="mascaraCNPJ(this)" maxlength="18">
     </div>
 
     <h3>2. PERÍODO E VALOR</h3>
@@ -120,7 +121,10 @@
 
     <h3>3. RESPONSÁVEL</h3>
     <div class="form-group"><label>Nome do Sócio</label><input type="text" id="inSocio"></div>
-    <div class="form-group"><label>CPF</label><input type="text" id="inCpf"></div>
+    <div class="form-group">
+        <label>CPF</label>
+        <input type="text" id="inCpf" placeholder="000.000.000-00" oninput="mascaraCPF(this)" maxlength="14">
+    </div>
 
     <h3>4. DATA E LOCAL</h3>
     <div class="form-group"><label>Cidade</label><input type="text" id="inCidade" value="Baturité"></div>
@@ -190,6 +194,27 @@
         v = v.replace(/(\d)(\d{3})(\d{3}),/g, "$1.$2.$3,");
         v = v.replace(/(\d)(\d{3}),/g, "$1.$2,");
         i.value = v !== '0,00' ? 'R$ ' + v : '';
+    }
+
+    function mascaraCNPJ(i) {
+        let v = i.value.replace(/\D/g, ""); // Remove tudo que não é número
+        if (v.length > 14) v = v.substring(0, 14);
+    
+        v = v.replace(/^(\d{2})(\d)/, "$1.$2");
+        v = v.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+        v = v.replace(/\.(\d{3})(\d)/, ".$1/$2");
+        v = v.replace(/(\d{4})(\d)/, "$1-$2");
+        i.value = v;
+    }
+
+    function mascaraCPF(i) {
+        let v = i.value.replace(/\D/g, ""); // Remove tudo que não é número
+        if (v.length > 11) v = v.substring(0, 11);
+
+        v = v.replace(/(\d{3})(\d)/, "$1.$2");
+        v = v.replace(/(\d{3})\.(\d{3})(\d)/, "$1.$2.$3");
+        v = v.replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/, "$1.$2.$3-$4");
+        i.value = v;
     }
 
     function mudarTitulo() {
@@ -284,6 +309,8 @@
         document.getElementById('outTotalVendas').innerText = formatar(t);
         document.getElementById('outTotalGeral').innerText = formatar(t);
     }
+
+
 </script>
 </body>
 </html>
