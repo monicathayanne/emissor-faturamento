@@ -4,46 +4,28 @@
     <meta charset="UTF-8">
     <title>Portal CONTEC - Relação de Faturamento</title>
     <style>
-       :root {
-        --contec-blue: #002D5A;  /* Azul Marinho Vivo */
-        --contec-gold: #D4AF37;  /* Dourado Metálico */
-        --bg-light: #f0f4f7;
-    }
+        :root {
+            --contec-blue: #002D5A;
+            --contec-gold: #D4AF37;
+            --bg-light: #f0f4f7;
+        }
 
-
-        /* Estilo para o link de voltar */
         .btn-voltar {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            color: #7a8a99; /* Cor cinza elegante */
-            font-size: 11px; /* Tamanho menor que você pediu */
-            margin-bottom: 20px;
-            font-weight: bold;
-            text-transform: uppercase;
-            transition: color 0.2s;
+            display: flex; align-items: center; text-decoration: none;
+            color: #7a8a99; font-size: 11px; margin-bottom: 20px;
+            font-weight: bold; text-transform: uppercase; transition: color 0.2s;
         }
-
-        .btn-voltar:hover {
-            color: var(--contec-blue); /* Fica azul ao passar o mouse */
-        }
-
-        .btn-voltar svg {
-            margin-right: 5px;
-            width: 14px;
-            height: 14px;
-        }
+        .btn-voltar:hover { color: var(--contec-blue); }
+        .btn-voltar svg { margin-right: 5px; width: 14px; height: 14px; }
 
         * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { margin: 0; display: flex; background-color: var(--bg-light); height: 100vh; }
 
-        /* Sidebar - Estilo Portal CONTEC */
         .sidebar {
             width: 350px; background: white; border-right: 1px solid #ddd;
             padding: 20px; overflow-y: auto; box-shadow: 2px 0 5px rgba(0,0,0,0.05);
         }
 
-        .logo-contec { text-align: center; margin-bottom: 30px; }
         h3 { color: var(--contec-blue); font-size: 16px; border-bottom: 2px solid var(--contec-gold); padding-bottom: 5px; margin-top: 25px; }
 
         .form-group { margin-bottom: 12px; }
@@ -55,22 +37,19 @@
             padding: 12px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 20px;
         }
 
-        /* Área de Visualização */
         .preview-container { flex: 1; padding: 20px; overflow-y: auto; display: flex; justify-content: center; background: #525659; }
 
-        /* Folha A4 */
         .folha-a4 {
-            width: 210mm; height: 297mm; background: white; padding: 15mm 20mm;
+            width: 210mm; min-height: 297mm; background: white; padding: 25mm 20mm;
             box-shadow: 0 0 15px rgba(0,0,0,0.3); display: flex; flex-direction: column; position: relative;
         }
 
-        .doc-header { border: 1.5px solid #000; text-align: center; padding: 10px; margin-bottom: 20px; }
+        .doc-header { border: 1.5px solid #000; text-align: center; padding: 10px; margin-bottom: 40px; }
         .doc-header h2 { margin: 0; font-size: 18px; text-transform: uppercase; }
 
         .info-row { display: flex; border-bottom: 1px solid #eee; padding: 6px 0; font-size: 13px; }
         .info-label { font-weight: bold; margin-right: 5px; min-width: 140px; }
 
-        /* Ajuste na Tabela para não esticar */
         table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; table-layout: fixed; }
         th, td { border: 1px solid #000; padding: 6px; text-align: center; height: 30px; }
         th { background: #f2f2f2; text-transform: uppercase; }
@@ -79,18 +58,17 @@
         .input-tabela { width: 100%; border: none; text-align: center; background: transparent; font-size: 12px; padding: 0; }
         .input-tabela:focus { outline: none; background: #fffdf0; }
 
-        /* Local e Data fixos após a tabela */
-        .container-local-data { text-align: center; margin-top: 30px; font-weight: bold; font-size: 13px; }
+        #containerDeclaracao { margin-bottom: 35px; font-size: 13px; text-align: justify; display: none; line-height: 1.5; }
+        .container-local-data { text-align: center; margin-top: 60px; font-weight: bold; font-size: 13px; }
 
-        /* Assinaturas empurradas para o fim da folha */
-        .assinaturas { margin-top: 150px; display: flex; justify-content: space-around; padding-bottom: 10mm; }
+        .assinaturas { margin-top: auto; display: flex; justify-content: space-around; padding-bottom: 10mm; }
         .box-assinatura { width: 45%; border-top: 1px solid #000; text-align: left; padding-top: 5px; font-size: 11px; line-height: 1.4; }
 
         @media print {
             body, .preview-container { background: none; padding: 0; display: block; overflow: hidden !important; }
             .sidebar { display: none; }
             .folha-a4 { box-shadow: none; margin: 0; border: none; width: 100%; height: 100%; }
-            html, body { height: 100%; overflow: hidden !important; }
+            .input-tabela { border: none !important; outline: none !important; }
             .input-tabela::-webkit-inner-spin-button, .input-tabela::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         }
     </style>
@@ -98,17 +76,22 @@
 <body>
 
 <div class="sidebar">
-
     <a href="https://monicathayanne.github.io/portal-contec/" class="btn-voltar">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-        </svg>
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
         Voltar para o Portal
     </a>
 
-    <div class="logo-container" style="text-align: center; margin-bottom: 30px;">
+    <div style="text-align: center; margin-bottom: 30px;">
         <img src="logo_contec.png" alt="CONTEC" style="max-width: 200px;"> 
-        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Tipo de Documento</label>
+        <select id="inTipoDoc" onchange="mudarTitulo()">
+            <option value="relacao">Relação de Faturamento (Passado)</option>
+            <option value="previsao">Previsão de Faturamento (Futuro)</option>
+        </select>
+    </div>
 
     <h3>1. DADOS DA EMPRESA</h3>
     <div class="form-group">
@@ -128,42 +111,21 @@
             <option value="manual">Digitar Mês a Mês (Manual)</option>
         </select>
     </div>
-    <div class="form-group">
-        <label>Mês Inicial</label>
-        <input type="month" id="inInicio">
-    </div>
-    <div class="form-group">
-        <label>Mês Final</label>
-        <input type="month" id="inFim">
-    </div>
+    <div class="form-group"><label>Mês Inicial</label><input type="month" id="inInicio"></div>
+    <div class="form-group"><label>Mês Final</label><input type="month" id="inFim"></div>
     <div class="form-group" id="groupValorBruto">
         <label>Valor Bruto Total (R$)</label>
-        <input type="number" id="inValor" placeholder="Ex: 185800">
+        <input type="text" id="inValor" placeholder="R$ 0,00" oninput="mascaraMoeda(this)">
     </div>
 
     <h3>3. RESPONSÁVEL</h3>
-    <div class="form-group">
-        <label>Nome do Sócio</label>
-        <input type="text" id="inSocio" placeholder="Nome do Responsável">
-    </div>
-    <div class="form-group">
-        <label>CPF</label>
-        <input type="text" id="inCpf" placeholder="000.000.000-00">
-    </div>
+    <div class="form-group"><label>Nome do Sócio</label><input type="text" id="inSocio"></div>
+    <div class="form-group"><label>CPF</label><input type="text" id="inCpf"></div>
 
     <h3>4. DATA E LOCAL</h3>
-    <div class="form-group">
-        <label>Cidade</label>
-        <input type="text" id="inCidade" value="Baturité">
-    </div>
-    <div class="form-group">
-        <label>UF</label>
-        <input type="text" id="inUf" value="CE">
-    </div>
-    <div class="form-group">
-        <label>Data do Documento</label>
-        <input type="date" id="inDataDoc">
-    </div>
+    <div class="form-group"><label>Cidade</label><input type="text" id="inCidade" value="Baturité"></div>
+    <div class="form-group"><label>UF</label><input type="text" id="inUf" value="CE"></div>
+    <div class="form-group"><label>Data do Documento</label><input type="date" id="inDataDoc"></div>
 
     <button class="btn-gerar" onclick="gerarRelatorio()">GERAR RELATÓRIO</button>
     <button class="btn-gerar" style="background:#666;" onclick="window.print()">IMPRIMIR PDF</button>
@@ -172,13 +134,16 @@
 <div class="preview-container">
     <div class="folha-a4">
         <div class="doc-header">
-            <h2>Relação de Faturamento dos Últimos 12 meses <span id="outAno" style="display:none;"></span></h2>
+            <h2 id="outTitulo">Relação de Faturamento dos Últimos 12 meses</h2>
         </div>
 
-        <div class="info-row"><span class="info-label">Empresa proponente:</span> <span id="outEmpresa">---</span></div>
-        <div class="info-row"><span class="info-label">CNPJ:</span> <span id="outCnpj">---</span></div>
-        
-        <p style="font-size: 11px; margin: 15px 0; text-align: center;">Informe os valores das Vendas dos Ultimos 12 meses em R$ (1,00)</p>
+        <div id="containerDeclaracao"></div>
+
+        <div id="containerRelacao">
+            <div class="info-row"><span class="info-label">Empresa proponente:</span> <span id="outEmpresa">---</span></div>
+            <div class="info-row"><span class="info-label">CNPJ:</span> <span id="outCnpj">---</span></div>
+            <p style="font-size: 11px; margin: 15px 0; text-align: center;">Informe os valores das Vendas dos Últimos 12 meses em R$ (1,00)</p>
+        </div>
 
         <table>
             <thead>
@@ -198,9 +163,7 @@
             </tfoot>
         </table>
 
-        <div class="container-local-data">
-            <span id="outLocalData">Baturité-CE, 05 de Março de 2026</span>
-        </div>
+        <div class="container-local-data"><span id="outLocalData"></span></div>
 
         <div class="assinaturas">
             <div class="box-assinatura">
@@ -220,111 +183,106 @@
 <script>
     document.getElementById('inDataDoc').valueAsDate = new Date();
 
+    function mascaraMoeda(i) {
+        let v = i.value.replace(/\D/g,'');
+        v = (v/100).toFixed(2) + '';
+        v = v.replace(".", ",");
+        v = v.replace(/(\d)(\d{3})(\d{3}),/g, "$1.$2.$3,");
+        v = v.replace(/(\d)(\d{3}),/g, "$1.$2,");
+        i.value = v !== '0,00' ? 'R$ ' + v : '';
+    }
+
+    function mudarTitulo() {
+        const tipo = document.getElementById('inTipoDoc').value;
+        const outTitulo = document.getElementById('outTitulo');
+        const contPrevisao = document.getElementById('containerDeclaracao');
+        const contRelacao = document.getElementById('containerRelacao');
+
+        if (tipo === 'previsao') {
+            outTitulo.innerText = "Declaração de Previsão de Faturamento";
+            contPrevisao.style.display = "block";
+            contRelacao.style.display = "none";
+        } else {
+            outTitulo.innerText = "Relação de Faturamento dos Últimos 12 meses";
+            contPrevisao.style.display = "none";
+            contRelacao.style.display = "block";
+        }
+    }
+
     function alternarModo() {
-        const modo = document.getElementById('inModo').value;
-        document.getElementById('groupValorBruto').style.display = (modo === 'auto') ? 'block' : 'none';
+        document.getElementById('groupValorBruto').style.display = (document.getElementById('inModo').value === 'auto') ? 'block' : 'none';
     }
 
     function formatar(v) { return v.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }); }
 
     function gerarRelatorio() {
         const modo = document.getElementById('inModo').value;
-        const inicioInput = document.getElementById('inInicio').value;
-        const fimInput = document.getElementById('inFim').value;
+        const tipo = document.getElementById('inTipoDoc').value;
+        const inicio = document.getElementById('inInicio').value;
+        const fim = document.getElementById('inFim').value;
 
-        if(!inicioInput || !fimInput) {
-            alert("Preencha o período inicial e final!");
-            return;
-        }
+        if(!inicio || !fim) { alert("Preencha o período!"); return; }
 
-        const d1 = new Date(inicioInput + "-01T12:00:00");
-        const d2 = new Date(fimInput + "-01T12:00:00");
-
-        document.getElementById('outEmpresa').innerText = document.getElementById('inEmpresa').value || "---";
-        document.getElementById('outCnpj').innerText = document.getElementById('inCnpj').value || "---";
-        document.getElementById('outAno').innerText = d1.getFullYear();
+        const empresa = document.getElementById('inEmpresa').value || "---";
+        const cnpj = document.getElementById('inCnpj').value || "---";
+        
+        document.getElementById('outEmpresa').innerText = empresa;
+        document.getElementById('outCnpj').innerText = cnpj;
         document.getElementById('outAssNome').innerText = document.getElementById('inSocio').value || "__________";
         document.getElementById('outAssCpf').innerText = document.getElementById('inCpf').value || "__________";
 
-        const cidade = document.getElementById('inCidade').value;
-        const uf = document.getElementById('inUf').value;
-        const dataDocInput = document.getElementById('inDataDoc').value;
-        const dataDoc = new Date(dataDocInput + "T12:00:00");
-        const opcoesData = { day: '2-digit', month: 'long', year: 'numeric' };
-        document.getElementById('outLocalData').innerText = `${cidade}-${uf}, ${dataDoc.toLocaleDateString('pt-br', opcoesData)}`;
+        if (tipo === 'previsao') {
+            document.getElementById('containerDeclaracao').innerHTML = `Declaramos, para os devidos fins de comprovação de renda/faturamento junto à instituição solicitante, que a empresa <strong>${empresa}</strong>, inscrita no CNPJ sob o nº <strong>${cnpj}</strong>, apresenta a seguinte PREVISÃO DE FATURAMENTO BRUTO para os próximos 12 (doze) meses, elaborada com base em seu plano de negócios e expectativas de mercado.`;
+        }
+
+        const dataDoc = new Date(document.getElementById('inDataDoc').value + "T12:00:00");
+        document.getElementById('outLocalData').innerText = `${document.getElementById('inCidade').value}-${document.getElementById('inUf').value}, ${dataDoc.toLocaleDateString('pt-br', {day:'2-digit', month:'long', year:'numeric'})}`;
 
         let meses = [];
-        let curr = new Date(d1);
-        while (curr <= d2) {
-            meses.push(new Date(curr));
-            curr.setMonth(curr.getMonth() + 1);
-        }
+        let curr = new Date(inicio + "-01T12:00:00");
+        let d2 = new Date(fim + "-01T12:00:00");
+        while (curr <= d2) { meses.push(new Date(curr)); curr.setMonth(curr.getMonth() + 1); }
 
         const corpo = document.getElementById('tabelaCorpo');
         corpo.innerHTML = "";
 
         if (modo === 'auto') {
-            const valorBruto = parseFloat(document.getElementById('inValor').value) || 0;
-            const qtd = meses.length;
-            const media = valorBruto / qtd;
+            let vLimpo = document.getElementById('inValor').value.replace(/\D/g,'') / 100;
+            const total = parseFloat(vLimpo) || 0;
+            const media = total / meses.length;
             let acumulado = 0;
 
             meses.forEach((data, i) => {
-                let valorMes;
-                if (i === qtd - 1) {
-                    valorMes = valorBruto - acumulado;
-                } else {
-                    const variacao = (Math.random() * 0.20) - 0.10;
-                    valorMes = Math.round(media * (1 + variacao));
-                    acumulado += valorMes;
-                }
-                renderizarLinha(data, valorMes);
+                let vMes = (i === meses.length - 1) ? (total - acumulado) : Math.round(media * (1 + (Math.random() * 0.2 - 0.1)));
+                acumulado += vMes;
+                renderizarLinha(data, vMes);
             });
-            atualizarTotais(valorBruto);
+            atualizarTotais(total);
         } else {
-            meses.forEach((data) => {
-                renderizarLinhaManual(data);
-            });
+            meses.forEach(data => renderizarLinha(data, 0));
             atualizarTotais(0);
         }
     }
 
     function renderizarLinha(data, valor) {
         const m = (data.getMonth() + 1).toString().padStart(2, '0');
-        const ano = data.getFullYear();
-        document.getElementById('tabelaCorpo').innerHTML += `<tr>
-            <td>${m}/${ano}</td>
-            <td>${formatar(valor)}</td>
-            <td>${formatar(valor)}</td>
-        </tr>`;
-    }
-
-    function renderizarLinhaManual(data) {
-        const m = (data.getMonth() + 1).toString().padStart(2, '0');
-        const ano = data.getFullYear();
-        document.getElementById('tabelaCorpo').innerHTML += `<tr>
-            <td>${m}/${ano}</td>
-            <td><input type="number" class="input-tabela" oninput="somarManual()" placeholder="0.00"></td>
-            <td class="col-total-manual">R$ 0,00</td>
-        </tr>`;
+        const vInput = valor ? valor.toFixed(2) : "0.00";
+        document.getElementById('tabelaCorpo').innerHTML += `<tr><td>${m}/${data.getFullYear()}</td><td><input type="number" step="0.01" class="input-tabela" value="${vInput}" oninput="somarManual()"></td><td class="col-total-manual">${formatar(valor)}</td></tr>`;
     }
 
     function somarManual() {
         let soma = 0;
-        const inputs = document.querySelectorAll('.input-tabela');
-        const colsTotal = document.querySelectorAll('.col-total-manual');
-        
-        inputs.forEach((input, i) => {
+        document.querySelectorAll('.input-tabela').forEach((input, i) => {
             const val = parseFloat(input.value) || 0;
             soma += val;
-            colsTotal[i].innerText = formatar(val);
+            document.querySelectorAll('.col-total-manual')[i].innerText = formatar(val);
         });
         atualizarTotais(soma);
     }
 
-    function atualizarTotais(total) {
-        document.getElementById('outTotalVendas').innerText = formatar(total);
-        document.getElementById('outTotalGeral').innerText = formatar(total);
+    function atualizarTotais(t) {
+        document.getElementById('outTotalVendas').innerText = formatar(t);
+        document.getElementById('outTotalGeral').innerText = formatar(t);
     }
 </script>
 </body>
