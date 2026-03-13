@@ -298,14 +298,29 @@
 
     function renderizarLinha(data, valor) {
         const m = (data.getMonth() + 1).toString().padStart(2, '0');
-        const vInput = valor ? valor.toFixed(2) : "0.00";
-        document.getElementById('tabelaCorpo').innerHTML += `<tr><td>${m}/${data.getFullYear()}</td><td><input type="number" step="0.01" class="input-tabela" value="${vInput}" oninput="somarManual()"></td><td class="col-total-manual">${formatar(valor)}</td></tr>`;
+        // Se houver valor (modo auto), já formata. Se não, deixa vazio.
+        let vFormatado = "";
+        if (valor > 0) {
+            vFormatado = 'R$ ' + valor.toFixed(2).replace(".", ",").replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+        }
+
+        document.getElementById('tabelaCorpo').innerHTML += `
+            <tr>
+                <td>${m}/${data.getFullYear()}</td>
+                <td>
+                    <input type="text" class="input-tabela" value="${vFormatado}" 
+                    oninput="mascaraMoedaTabela(this); somarManual()">
+                </td>
+                <td class="col-total-manual">${formatar(valor)}</td>
+            </tr>`;
     }
 
     function somarManual() {
         let soma = 0;
         document.querySelectorAll('.input-tabela').forEach((input, i) => {
-            const val = parseFloat(input.value) || 0;
+            // Remove "R$ ", pontos e troca virgula por ponto para o computador somar
+            let valLimpo = input.value.replace("R$ ", "").replace(/\./g, "").replace(",", ".");
+            const val = parseFloat(valLimpo) || 0;
             soma += val;
             document.querySelectorAll('.col-total-manual')[i].innerText = formatar(val);
         });
@@ -315,6 +330,15 @@
     function atualizarTotais(t) {
         document.getElementById('outTotalVendas').innerText = formatar(t);
         document.getElementById('outTotalGeral').innerText = formatar(t);
+    }
+
+    function mascaraMoedaTabela(i) {
+        let v = i.value.replace(/\D/g,'');
+        v = (v/100).toFixed(2) + '';
+        v = v.replace(".", ",");
+        v = v.replace(/(\d)(\d{3})(\d{3}),/g, "$1.$2.$3,");
+        v = v.replace(/(\d)(\d{3}),/g, "$1.$2,");
+        i.value = v !== '0,00' ? 'R$ ' + v : '';
     }
 
 
